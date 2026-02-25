@@ -3,21 +3,22 @@
 
 using namespace std;
 
-// Структура для двусвязного списка (Задание 3)
+// Структура для списка
 struct Node {
     int data;
     Node* next;
     Node* prev;
 };
 
-int main() {
-    setlocale(LC_ALL, "Russian"); // Для корректного вывода кириллицы
-    const int n = 10;
+// Прототипы функций (чтобы main их видел)
+void modifyValues(int& ref, int* ptr);
+void demoModifyValues();
 
-    // ==========================================================
-    // ЗАДАНИЕ 1: Четыре варианта заполнения массива
-    // ==========================================================
-    cout << "--- Задание 1: Заполнение массива (квадрат индекса) ---" << endl;
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    const int n = 10;
+    cout << "Заполнение массивов" << endl;
 
     // 1) Статика, индексная адресация
     int arr1[n];
@@ -49,19 +50,15 @@ int main() {
     cout << endl;
     delete[] arr4;
 
-    // ==========================================================
-    // ЗАДАНИЕ 2: Объединение двух упорядоченных массивов
-    // ==========================================================
-    cout << "\n--- Задание 2: Объединение упорядоченных массивов ---" << endl;
-    int n1 = 5, n2 = 7;
-    int* A = new int[n1] {1, 3, 5, 7, 9};       // Индексная
-    int* B = new int[n2] {2, 4, 6, 8, 10, 12, 14}; // Косвенная
 
+    cout << "\nОбъединение упорядоченных массивов" << endl;
+    int n1 = 5, n2 = 7;
+    int* A = new int[n1] {1, 3, 5, 7, 9};
+    int* B = new int[n2] {2, 4, 6, 8, 10, 12, 14};
     int* C = new int[n1 + n2];
     int i = 0, j = 0, k = 0;
-
     while (i < n1 && j < n2) {
-        if (A[i] <= *(B + j)) { // Смешанная адресация по условию
+        if (A[i] <= *(B + j)) {
             C[k++] = A[i++];
         }
         else {
@@ -77,26 +74,21 @@ int main() {
 
     delete[] A; delete[] B; delete[] C;
 
-    // ==========================================================
-    // ЗАДАНИЕ 3: Двусвязный самоадресуемый список
-    // ==========================================================
-    cout << "\n--- Задание 3: Двусвязный список (10 элементов) ---" << endl;
+
+    cout << "\nДвусвязный список" << endl;
     Node* head = nullptr;
     Node* tail = nullptr;
-
     for (int i = 1; i <= 10; ++i) {
         Node* newNode = new Node{ i, nullptr, tail };
         if (tail) tail->next = newNode;
         else head = newNode;
         tail = newNode;
     }
-
     cout << "Элементы списка: ";
     for (Node* curr = head; curr != nullptr; curr = curr->next) {
         cout << "[" << curr->data << "]" << (curr->next ? " <-> " : "");
     }
     cout << endl;
-
     // Очистка памяти списка
     while (head) {
         Node* temp = head;
@@ -104,5 +96,17 @@ int main() {
         delete temp;
     }
 
+    demoModifyValues();
     return 0;
+}
+void modifyValues(int& ref, int* ptr) {
+    ref = 100;
+    *ptr = 200;
+}
+void demoModifyValues() {
+    cout << "\nУпражнение 2\n";
+    int a = 1, b = 2;
+    cout << "До: a = " << a << ", b = " << b << endl;
+    modifyValues(a, &b);
+    cout << "После: a = " << a << ", b = " << b << endl;
 }
